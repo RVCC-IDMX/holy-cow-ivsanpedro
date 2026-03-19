@@ -1,6 +1,31 @@
 var balloon = require("./lib/balloon");
 var cows = require("./lib/cows");
 var faces = require("./lib/faces");
+//import fast-string-width to calculate the width of the text for proper balloon formatting
+import fastStringWidth from 'fast-string-width';
+
+// Width of various classes of characters
+
+const options = {
+  controlWidth: 0,
+  tabWidth: 8,
+  emojiWidth: 2,
+  regularWidth: 1,
+  wideWidth: 2
+};
+
+// Calculating the visual width of some strings
+
+fastStringWidth ( 'hello', options ); // => 5
+// ANSI escape codes are ignored. Sets the color of the text to red, 
+// but does not affect the width.
+fastStringWidth ( '\x1b[31mhello', options ); // => 5
+fastStringWidth ( '👨‍👩‍👧‍👦', options ); // => 2
+fastStringWidth ( 'hello👨‍👩‍👧‍👦', options ); // => 7
+
+// Calculating the visual width while tweaking the width of emojis
+
+fastStringWidth ( '👶👶🏽', { ...options, emojiWidth: 1.5 } ); // => 3
 
 /**
  * @param options
