@@ -1,7 +1,6 @@
-var balloon = require("./lib/balloon");
-var cows = require("./lib/cows");
-var faces = require("./lib/faces");
-//import fast-string-width to calculate the width of the text for proper balloon formatting
+import balloon from "./lib/balloon.js";
+import cows from "./lib/cows.js";
+import faces from "./lib/faces.js";
 import fastStringWidth from 'fast-string-width';
 
 // Width of various classes of characters
@@ -78,9 +77,14 @@ fastStringWidth ( '👶👶🏽', { ...options, emojiWidth: 1.5 } ); // => 3
  * 
  * @returns {string} compiled cow
  */
-exports.say = function (options) {
+/**
+ * Generates a cow saying the provided message.
+ * @param {Object} options - Options for customizing the cow and message.
+ * @returns {string} The cow with a speech balloon.
+ */
+export function say(options) {
 	return doIt(options, true);
-};
+}
 
 /**
  * @param options
@@ -133,9 +137,14 @@ exports.say = function (options) {
  * 
  * @returns {string} compiled cow
  */
-exports.think = function (options) {
+/**
+ * Generates a cow thinking the provided message.
+ * @param {Object} options - Options for customizing the cow and message.
+ * @returns {string} The cow with a thought balloon.
+ */
+export function think(options) {
 	return doIt(options, false);
-};
+}
 
 /**
  * @example
@@ -154,8 +163,19 @@ exports.think = function (options) {
  * @param callback
  * @returns {Promise} promise
  */
-exports.list = cows.list;
+/**
+ * Returns a promise that resolves to the list of available cow names.
+ * @param {Function} callback - Callback to receive the list or error.
+ * @returns {Promise}
+ */
+export const list = cows.list;
 
+/**
+ * Internal helper to generate the cow output (saying or thinking).
+ * @param {Object} options - Options for customizing the cow and message.
+ * @param {boolean} sayAloud - If true, cow says; if false, cow thinks.
+ * @returns {string} The cow with the appropriate balloon.
+ */
 function doIt (options, sayAloud) {
 	var cowFile;
 

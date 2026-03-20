@@ -53,14 +53,27 @@ If the program is invoked as cowthink then the cow will think its message instea
 
 const argv = yargs.argv;
 
+// The code below is adapted from the original cowsay CLI implementation in lib/balloon.js
+/**
+ * Decodes Unicode escape sequences (e.g., \u{1F98A}) in a string to their actual characters.
+ * @param {string} str - The input string possibly containing Unicode escapes.
+ * @returns {string} The decoded string with Unicode characters.
+ */
+function decodeUnicodeEscapes(str) {
+  return str.replace(/\\u\{([0-9a-fA-F]+)\}/g, (_, code) =>
+    String.fromCodePoint(parseInt(code, 16))
+  );
+}
+
 if (argv.l) {
   listCows();
 } else if (argv._.length) {
+  argv._ = argv._.map(decodeUnicodeEscapes);
   say();
 } else {
   require('get-stdin')().then((data) => {
     if (data) {
-      argv._ = [require('strip-final-newline')(data)];
+      argv._ = [decodeUnicodeEscapes(require('strip-final-newline')(data))];
       say();
     } else {
       yargs.showHelp();
@@ -68,13 +81,18 @@ if (argv.l) {
   });
 }
 
+/**
+ * Outputs the cow saying or thinking the message, depending on CLI invocation.
+ */
 function say() {
   const module = require('./index');
   const think = /think$/.test(argv['$0']) || argv.think;
-
   console.log(think ? module.think(argv) : module.say(argv));
 }
 
+/**
+ * Lists all available cowfiles included in the package.
+ */
 function listCows() {
   require('./index').list((err, list) => {
     if (err) throw new Error(err);
