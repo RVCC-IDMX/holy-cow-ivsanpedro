@@ -8,9 +8,15 @@
   <body>
     <pre id="output"></pre>
     <script>
+      /// Helper function to decode Unicode escape sequences in the input string
+      function decodeUnicodeEscapes(str) {
+        return str.replace(/\\u\{([0-9a-fA-F]+)\}/g, (_, code) =>
+          String.fromCodePoint(parseInt(code, 16))
+        );
+      }
       const output = document.getElementById('output');
       output.textContent = cowsay.say({
-        text: 'grazing in the browser',
+        text: decodeUnicodeEscapes('grazing in the browser\\u{1F409}'),
         cow: cowsay.DRAGON,
       });
     </script>

@@ -19,6 +19,7 @@ This project is a translation in JavaScript of the original program and an attem
 
     npm install -g cowsay
 
+
 ## Usage
 
     cowsay JavaScript FTW!
@@ -26,6 +27,85 @@ This project is a translation in JavaScript of the original program and an attem
 or
 
     cowthink node.js is cool
+
+### Unicode and Emoji Support
+
+You can now use Unicode and emoji characters in your messages, both in the CLI and browser. For example:
+
+#### CLI
+
+        cowsay "Unicode test: 🦊"
+        cowsay "Unicode test: \u{1F98A}"
+
+The CLI will automatically convert Unicode escape sequences (e.g., `\u{1F98A}`) to the correct emoji (🦊).
+
+#### Browser
+
+If you want to use a Unicode escape sequence in the browser, use the provided helper function to decode it:
+
+```js
+function decodeUnicodeEscapes(str) {
+    return str.replace(/\\u\{([0-9a-fA-F]+)\}/g, (_, code) =>
+        String.fromCodePoint(parseInt(code, 16))
+    );
+}
+
+output.textContent = cowsay.say({
+    text: decodeUnicodeEscapes('grazing in the browser \\u{1F409}'),
+    cow: cowsay.DRAGON,
+});
+
+````
+___________________________
+< grazing in the browser 🐉 >
+ ---------------------------
+      \                    / \  //\
+       \    |\___/|      /   \//  \\
+            /o  o  \__  /    //  | \ \    
+           /     /  \/_/    //   |  \  \  
+           @_^_@'/   \/_   //    |   \   \ 
+           //_^_/     \/_ //     |    \    \
+        ( //) |        \///      |     \     \
+      ( / /) _|_ /   )  //       |      \     _\
+    ( // /) '/,_ _ _/  ( ; -.    |    _ _\.-~        .-~~~^-.
+  (( / / )) ,-{        _      `-.|.-~-.           .~         `.
+ (( // / ))  '/\      /                 ~-. _ .-~      .-~^-.  \
+ (( /// ))      `.   {            }                   /      \  \
+  (( / ))     .----~-.\        \-'                 .~         \  `. \^-.
+             ///.----..>        \             _ -~             `.  ^-`  ^-_
+               ///-._ _ _ _ _ _ _}^ - - - - ~                     ~-- ,.-~
+                                                                  /.-~
+````                                  
+
+```
+
+Or simply use the emoji directly in your string:
+
+```js
+output.textContent = cowsay.say({
+    text: 'grazing in the browser 🦊',
+    cow: cowsay.FOX,
+});
+
+````
+ ___________________________
+< grazing in the browser 🦊 >
+ ---------------------------
+\
+ \
+   /\   /\   Todd Vargo
+  //\\_//\\     ____
+  \_     _/    /   /
+   / * * \    /^^^]
+   \_\O/_/    [   ]
+    /   \_    [   /
+    \     \_  /  /
+     [ [ /  \/ _/
+    _[ [ \  /_/
+````
+
+
+```
 
 It acts in the same way as the original cowsay, so consult `cowsay(1)` or run `cowsay -h`
 
@@ -45,6 +125,7 @@ It acts in the same way as the original cowsay, so consult `cowsay(1)` or run `c
         "*$bd$$$$      '*$$$$$$$$$$$o+#"
              """"          """""""
 ````
+
 
 ## Usage as a module
 
@@ -126,6 +207,8 @@ console.log(cowsay.say(opts));
 
     echo please repeat | cowsay
 
+cowsay works in your browser too with rollup / webpack / browserify / you name it.
+
 ## Usage in the browser
 
 cowsay works in your browser too with rollup / webpack / browserify / you name it.
@@ -142,14 +225,15 @@ You can customize the cow by importing the relevant one
 import { think, SQUIRREL } from 'cowsay';
 
 console.log(think({
-  text: 'grazing in the browser',
-  cow: SQUIRREL,
-  eyes: 'pp',
-  tongue: ';;',
+    text: 'grazing in the browser',
+    cow: SQUIRREL,
+    eyes: 'pp',
+    tongue: ';;',
 }));
 ```
 
 All cows are included in the bundle, but you can use rollup / webpack tree-shake feature to reduce the final bundle size.
+
 
 ### Browser options
 
