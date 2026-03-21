@@ -14,11 +14,19 @@
           String.fromCodePoint(parseInt(code, 16))
         );
       }
-      const output = document.getElementById('output');
-      output.textContent = cowsay.say({
-        text: decodeUnicodeEscapes('grazing in the browser\\u{1F409}'),
-        cow: cowsay.DRAGON,
-      });
+        //Display the cow saying a message with a Unicode emoji using the decodeUnicodeEscapes function
+        const output = document.getElementById('output');
+        output.textContent = cowsay.say({
+          text: decodeUnicodeEscapes('grazing in the browser \\u{1F409}'),
+          cow: cowsay.DRAGON,
+        });
+        const foxOutput = document.createElement('pre');
+        foxOutput.id = 'fox-output';
+        document.body.appendChild(foxOutput);
+        foxOutput.textContent = cowsay.say({
+          text: decodeUnicodeEscapes('sneaking in the woods 🦊'), // Directly using the emoji 
+          cow: cowsay.FOX,
+        });
     </script>
   </body>
 </html>
